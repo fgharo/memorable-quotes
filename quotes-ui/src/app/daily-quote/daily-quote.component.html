@@ -1,0 +1,15 @@
+<div>
+  <i>
+    <p *ngIf="quote" class="multi_lines_text">"{{quote.quotation}}"</p>
+  </i>
+  <label *ngIf="quote.author && quote.source; else elseBlock" class="author-long" >
+    -- {{quote.author.lastName}}, {{quote.author.firstName}}, {{quote.source.title}} {{quote.source.originDate.year}}
+  </label>
+  <ng-template #elseBlock>
+    -- Unknown
+    <label class="author-long">
+      -- Unknown
+    </label>
+  </ng-template>
+
+</div>
