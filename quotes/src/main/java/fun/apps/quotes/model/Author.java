@@ -14,8 +14,8 @@ public class Author implements Serializable{
 	private String middleName;
 	private String lastName;
 	private String primaryProfession;
+	private Image image;
 	
 	private ApproximateDate birth;
-	
 	private ApproximateDate death;
 }

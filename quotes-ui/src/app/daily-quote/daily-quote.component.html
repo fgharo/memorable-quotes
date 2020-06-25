@@ -1,15 +1,12 @@
-<div>
+<div *ngIf="quote && quote.author && quote.source && imagePath">
+
+  <img [src]="imagePath" [style.width]="imageWidth" [style.height]="imageHeight"/>
+
   <i>
-    <p *ngIf="quote" class="multi_lines_text">"{{quote.quotation}}"</p>
+    <p class="multi_lines_text">"{{quote.quotation}}"</p>
   </i>
-  <label *ngIf="quote.author && quote.source; else elseBlock" class="author-long" >
+  <label class="author-long" >
     -- {{quote.author.lastName}}, {{quote.author.firstName}}, {{quote.source.title}} {{quote.source.originDate.year}}
   </label>
-  <ng-template #elseBlock>
-    -- Unknown
-    <label class="author-long">
-      -- Unknown
-    </label>
-  </ng-template>
 
 </div>

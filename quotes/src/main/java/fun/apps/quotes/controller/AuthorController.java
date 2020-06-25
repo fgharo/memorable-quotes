@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fun.apps.quotes.model.ApproximateDate;
 import fun.apps.quotes.model.Author;
+import fun.apps.quotes.model.Image;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,9 +27,9 @@ public class AuthorController {
 			.firstName("Franklin")
 			.middleName("Delano")
 			.lastName("Roosevelt")
-			//.birthDate(LocalDate.of(1882, 1, 30))
 			.birth(ApproximateDate.builder().year(1882).month(1).day(30).build())
 			.death(ApproximateDate.builder().year(1945).month(4).day(12).build())
+			.image(Image.builder().fileName("no_author_image.png").width(500).height(500).build())
 			.primaryProfession("Politician - United States President")
 			.build(),
 			
@@ -38,6 +39,7 @@ public class AuthorController {
 			.lastName("Bacon")
 			.birth(ApproximateDate.builder().year(1561).month(1).day(22).build())
 			.death(ApproximateDate.builder().year(1626).month(4).day(9).build())
+			.image(Image.builder().fileName("no_author_image.png").width(500).height(500).build())
 			.primaryProfession("Philisopher of Science")
 			.build(),
 			
@@ -56,6 +58,7 @@ public class AuthorController {
 			.lastName("X")
 			.birth(ApproximateDate.builder().year(1925).month(5).day(19).build())
 			.death(ApproximateDate.builder().year(1965).month(2).day(21).build())
+			.image(Image.builder().fileName("no_author_image.png").width(500).height(500).build())
 			.primaryProfession("American Muslim Minister & Human Rights Activist")
 			.build(),
 			
@@ -65,6 +68,7 @@ public class AuthorController {
 			.lastName("Hume")
 			.birth(ApproximateDate.builder().year(1711).month(5).day(7).build())
 			.death(ApproximateDate.builder().year(1776).month(8).day(25).build())
+			.image(Image.builder().fileName("no_author_image.png").width(500).height(500).build())
 			.primaryProfession("Scottish Philosopher & Historian")
 			.build(),
 			
@@ -74,6 +78,7 @@ public class AuthorController {
 			.lastName("Rand")
 			.birth(ApproximateDate.builder().year(1905).month(2).day(2).build())
 			.death(ApproximateDate.builder().year(1982).month(3).day(6).build())
+			.image(Image.builder().fileName("no_author_image.png").width(500).height(500).build())
 			.primaryProfession("Russian-American writer & Philosopher")
 			.build()
 	);

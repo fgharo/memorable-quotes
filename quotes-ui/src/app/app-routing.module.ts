@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { QuoteCatalogComponent } from './quote-catalog/quote-catalog.component'
 import { DailyQuoteComponent } from './daily-quote/daily-quote.component'
+import { AddQuoteComponent } from './add-quote/add-quote.component'
 
 
 const routes: Routes = [
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'daily-quote',
     component: DailyQuoteComponent
+  },
+  {
+    path: 'add-quote',
+    component: AddQuoteComponent
   }
 ];
 

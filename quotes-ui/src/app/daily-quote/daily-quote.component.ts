@@ -11,6 +11,10 @@ import { Quote } from '../shared/model/quote';
 })
 export class DailyQuoteComponent implements OnInit {
   quote: Quote;
+  imagePath: string;
+  imageWidth: string;
+  imageHeight: string;
+
   constructor(
     private quoteService: QuoteService,
     private route: ActivatedRoute
@@ -22,12 +26,20 @@ export class DailyQuoteComponent implements OnInit {
       .subscribe((response) =>{
         this.quote = response;
         this.quoteService.getAuthor(this.quote.author_id).subscribe((authorResponse) =>{
-//          console.log("Getting author for id: " + quote.author_id);
           this.quote.author = authorResponse;
+          if(this.quote.author.image != null){
+            this.imagePath = "http://localhost:8080/image/" + this.quote.author.image.fileName;
+            this.imageWidth = this.quote.author.image.width + "px";
+            this.imageHeight = this.quote.author.image.height + "px";
+          }else{
+            this.imagePath = "assets/images/no_author_image.png"
+            this.imageWidth = "200px";
+            this.imageHeight = "200px";
+          }
+
         });
 
         this.quoteService.getInformationSource(this.quote.informationsource_id).subscribe((sourceResponse) =>{
-  //        console.log("Getting source for id: " + quote.informationsource_id);
           this.quote.source = sourceResponse;
         });
       });
