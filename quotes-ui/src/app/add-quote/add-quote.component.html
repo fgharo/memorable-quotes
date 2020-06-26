@@ -1,22 +1,67 @@
-<div style="text-align:center; margin-top: 100px; ">
-  <div>
-    <mat-card style="margin-top:10px; width: 50%;">
-          <mat-card-content>
-             <img [src]="localUrl" *ngIf="localUrl" width="250px" height="250px">
-             <mat-progress-bar [value]="file.progress"></mat-progress-bar>
+<form [formGroup]="quotationForm" (ngSubmit)="onSubmit()">
+  <div class="form-group" style="text-align:center; margin-top: 100px; ">
+    <div style="text-align: center">
+      <label>
+        Quotation?
+        <br>
+        <textarea  rows="15" cols="80" formControlName="quotation" required></textarea>
+      </label>
+    </div>
+    <div class="form-group" style="text-align: center;">
+      <label>Author?</label>
+      <div class="form-group" style="text-align: center; margin-left: 0px; margin-right: 0px;">
+        <label>
+          Picture:
+        </label>
+        <app-image-uploader (fileName)="setAuthorImage($event)"></app-image-uploader>
+      </div>
+      <div formGroupName="author">
+        <label>
+          First Name
+          <input type="text" formControlName="firstName">
+        </label>
 
-             <span id="file-label">
-                        {{fileLabel}}
-             </span>
-          </mat-card-content>
-          <mat-card-actions>
-              <button mat-button color="warn" (click)="onClick()">
-                  <mat-icon>file_upload</mat-icon>
-                  Upload
-              </button>
-          </mat-card-actions>
-      </mat-card>
-      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="jpg,png" style="display:none;" />
+        <label>
+          Last Name
+          <input type="text" formControlName="lastName">
+        </label>
+
+        <label>
+          Birth Date:
+          <input type="date" formControlName="birthDate">
+        </label>
+
+        <label>
+          Death Date:
+          <input type="date" formControlName="deathDate">
+        </label>
+      </div>
+
+      <div>
+        <label>Source?</label>
+        <div formGroupName="source">
+          <label>
+            Type
+            <input type="text" formControlName="type">
+          </label>
+
+          <label>
+            Title
+            <input type="text" formControlName="title">
+          </label>
+
+          <label>
+            Origin Date:
+            <input type="date" formControlName="originDate">
+          </label>
+        </div>
+      </div>
+
+
+    </div>
+
+    <button type="submit" [disabled]="!quotationForm.valid">Submit</button>
+
   </div>
 
-</div>
+</form>

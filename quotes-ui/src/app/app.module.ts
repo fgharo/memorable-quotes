@@ -14,24 +14,28 @@ import { MatToolbarModule,
   MatCardModule,
   MatButtonModule,
   MatProgressBarModule } from '@angular/material';
+import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuoteCatalogComponent,
     DailyQuoteComponent,
-    AddQuoteComponent
+    AddQuoteComponent,
+    ImageUploaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatToolbarModule,  
+    MatToolbarModule,
      MatIconModule,
      MatButtonModule,
      MatCardModule,
-     MatProgressBarModule
+     MatProgressBarModule,
+     ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

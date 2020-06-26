@@ -8,9 +8,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @RequestMapping("/quote")
 public class QuoteController {
-	Collection<Quote> data = Arrays.asList(
+	List<Quote> data = new ArrayList<>(
+		Arrays.asList(
 			Quote.builder()
 			.quotation("Take a method and try it. If it fails, admit it and try another. But aboveall, try something.")
 			.notes(
@@ -86,7 +92,7 @@ public class QuoteController {
 			.author_id("5")
 			.informationsource_id("5")
 			.build()
-	);
+	));
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public Collection<Quote> getAllQuotes(){		
@@ -122,6 +128,17 @@ public class QuoteController {
 	}
 	
 	
-	
+	@PostMapping(consumes= {"application/json"},produces = {"application/json"})
+	public ResponseEntity<?> postQuote(@RequestBody Quote quote){
+		String id = String.valueOf(this.data.size()+1);
+		quote.set_id(id);
+		this.data.add(quote);
+		
+		
+		JSONObject response = new JSONObject();
+		response.put("id", id);
+		
+		return new ResponseEntity<>(response.toString(),HttpStatus.OK);
+	}
 	
 }

@@ -1,15 +1,17 @@
 
-  <h2 class="title">Memorable Quotes</h2>
+<h2 class="title">Memorable Quotes</h2>
   <br>
-
+<div >
     <div *ngFor="let quote of quotes" >
       <i>
         <p *ngIf="quote" class="multi_lines_text">"{{quote.quotation}}"</p>
       </i>
-      <label *ngIf="quote.author && quote.source" class="author-short" >
-        -- {{quote.author.lastName}}, {{quote.author.firstName}}, {{quote.source.title}} {{quote.source.originDate.year}}
+
+      <label class="author-short" >
+        {{getPrettySourceOfInformation(quote)}}
       </label>
       <br>
       <br>
       <br>
     </div>
+</div>

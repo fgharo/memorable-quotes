@@ -1,16 +1,24 @@
 package fun.apps.quotes.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fun.apps.quotes.model.ApproximateDate;
+import fun.apps.quotes.model.Author;
 import fun.apps.quotes.model.InformationSource;
 import fun.apps.quotes.model.Quote;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 public class InformationSourceController {
 
 	
-	Collection<InformationSource> data = Arrays.asList(
+	List<InformationSource> data = new ArrayList<>(			
+			Arrays.asList(
 			InformationSource.builder()
 			._id("0")
 			.type("Speech")
@@ -65,7 +74,7 @@ public class InformationSourceController {
 			.originDate(ApproximateDate.builder().year(1964).build())
 			.build()
 			
-	);
+	));
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public Collection<InformationSource> getAllInfoSources(){		
@@ -84,5 +93,20 @@ public class InformationSourceController {
 			}
 		}
 		return result;
+	}
+	
+	
+	@PostMapping(consumes= {"application/json"},produces = {"application/json"})
+	public ResponseEntity<?> postInfoSource(@RequestBody InformationSource source){
+		String id = String.valueOf(this.data.size()+1);
+		source.set_id(id);
+		this.data.add(source);
+		
+		
+		
+		JSONObject response = new JSONObject();
+		response.put("id", id);
+		
+		return new ResponseEntity<>(response.toString(),HttpStatus.OK);
 	}
 }

@@ -1,6 +1,6 @@
 import { ApproximateDate } from './approximate-date';
 
-export interface Image {
+export class Image {
   fileName: string;
   width: number;
   height: number;

@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.AllArgsConstructor;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class Author implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String _id;

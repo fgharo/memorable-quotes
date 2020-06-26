@@ -1,0 +1,20 @@
+<div style="display: flex; justify-content:center; align-items:center;">
+    <mat-card style="margin-top:10px; width: 500px;">
+          <mat-card-content>
+             <img [src]="localUrl" *ngIf="localUrl" width="250px" height="250px">
+             <mat-progress-bar [value]="file.progress"></mat-progress-bar>
+
+             <span id="file-label">
+                        {{fileLabel}}
+             </span>
+          </mat-card-content>
+          <mat-card-actions>
+              <button type="button" mat-button color="warn" (click)="onClick()">
+                  <mat-icon>file_upload</mat-icon>
+                  Upload
+              </button>
+          </mat-card-actions>
+      </mat-card>
+      <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="jpg,png" style="display:none;" />
+
+</div>

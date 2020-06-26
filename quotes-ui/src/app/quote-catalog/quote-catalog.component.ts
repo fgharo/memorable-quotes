@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { of, forkJoin } from 'rxjs';
 
 import { QuoteService } from '../shared/service/quote.service';
 import { Quote } from '../shared/model/quote';
+import { Author } from '../shared/model/author';
+import { InformationSource } from '../shared/model/information-source';
+import { ApproximateDate } from '../shared/model/approximate-date';
 
 @Component({
   selector: 'app-quote-catalog',
@@ -23,22 +27,51 @@ export class QuoteCatalogComponent implements OnInit {
           this.quotes = response;
           console.log(this.quotes);
           this.quotes.forEach((quote) => {
-              this.quoteService.getAuthor(quote.author_id).subscribe((authorResponse) =>{
-                console.log("Getting author for id: " + quote.author_id);
-                quote.author = authorResponse;
-              });
+              let authorObservable = this.quoteService.getAuthor(quote.author_id);
+              let sourceObservable = this.quoteService.getInformationSource(quote.informationsource_id);
 
-              this.quoteService.getInformationSource(quote.informationsource_id).subscribe((sourceResponse) =>{
-                console.log("Getting source for id: " + quote.informationsource_id);
-                quote.source = sourceResponse;
+              forkJoin([authorObservable, sourceObservable]).subscribe((results)=>{
+                quote.author = results[0];
+                quote.source = results[1];
               });
           });
-
-          /* TODO Probably want to do another service call that gets data such as author,
-          information source, etc, since these will most likely be different collections. */
         });
     });
 
   }
 
+
+  getPrettySourceOfInformation(quote: Quote): string{
+      let result = '--  ';
+      if(quote.author && quote.source){
+
+        if(-1 == quote.author.firstName.indexOf("Unknown") &&  -1 < quote.author.lastName.indexOf("Unknown")){
+          result += quote.author.firstName;
+        }else if(-1 < quote.author.firstName.indexOf("Unknown") &&  -1 == quote.author.lastName.indexOf("Unknown")){
+          result += quote.author.lastName;
+        }else if(-1 < quote.author.firstName.indexOf("Unknown") &&  -1 < quote.author.lastName.indexOf("Unknown")){
+          result += 'Unkown Author';
+        }else{
+          result += quote.author.lastName + ',' + quote.author.firstName;
+
+        }
+
+        if(quote.source.originDate && quote.source.originDate.year){
+          result += ', ' + quote.source.originDate.year;
+        }else{
+          result += ', Unkown year';
+        }
+
+        if(quote.source.title && -1 == quote.source.title.indexOf("Unknown")){
+          result += ', ' + quote.source.title;
+        }else{
+          result += ', Unkown title'
+        }
+      }else{
+        result += 'loading...';
+      }
+
+
+      return result;
+    }
 }

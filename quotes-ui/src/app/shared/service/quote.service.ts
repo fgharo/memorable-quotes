@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Quote } from '../model/quote';
@@ -29,4 +30,26 @@ export class QuoteService {
   randomQuote(): Observable<Quote> {
     return this.httpClient.get<Quote>(this.quoteServiceUrl + 'quote?random');
   }
+
+  postAuthor(author: Author): Observable<any> {
+    console.log("Posting author...");
+    console.log(author);
+    //return of({id: 'someAuthorId'});
+    return this.httpClient.post<any>(this.quoteServiceUrl + 'author', author);
+  }
+
+  postInformationSource(informationSource: InformationSource): Observable<any> {
+    console.log("Posting source...");
+    console.log(informationSource);
+    //return of({id: 'someSourceId'});
+    return this.httpClient.post<any>(this.quoteServiceUrl + 'informationsource', informationSource);
+  }
+
+  postQuote(quote: Quote): Observable<any> {
+    console.log("Posting quote...");
+    console.log(quote);
+  //  return of({id: 'someQuoteId'});
+    return this.httpClient.post<any>(this.quoteServiceUrl + 'quote', quote);
+  }
+
 }

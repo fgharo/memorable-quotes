@@ -1,74 +1,74 @@
-import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef  } from '@angular/core';
 import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { of } from 'rxjs';
+import { of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { DroppyService } from '../shared/service/droppy.service';
+import { FormGroup, FormControl, FormBuilder  } from '@angular/forms';
+import { Validators } from '@angular/forms';
 
-const uploadAPI = 'http://localhost:8989/!/upload'; // better use a service class
+import {Image } from '../shared/model/image';
+import {Author } from '../shared/model/author';
+import {Quote } from '../shared/model/quote';
+import {InformationSource } from '../shared/model/information-source';
+import {ApproximateDate } from '../shared/model/approximate-date';
+import { QuoteService } from '../shared/service/quote.service';
+
 @Component({
   selector: 'app-add-quote',
   templateUrl: './add-quote.component.html',
   styleUrls: ['./add-quote.component.css']
 })
 export class AddQuoteComponent implements OnInit {
-  @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;
-  file = { data: null, inProgress: false, progress: 0};
-  fileLabel  = "No file chosen yet.";
-  localUrl: any[];
 
-  constructor(private uploadService: DroppyService) { }
+  authorImageName: string;
+
+  quotationForm: FormGroup = this.fb.group({
+    quotation: [''],
+    author: this.fb.group({
+      firstName: [''],
+      lastName: [''],
+      birthDate: [''],
+      deathDate: ['']
+    }),
+    source: this.fb.group({
+      type: [''],
+      title: [''],
+      originDate: ['']
+    })
+  });
+
+  constructor(private fb: FormBuilder, private quoteService: QuoteService){}
 
   ngOnInit() {
+    this.authorImageName = "no_author_image.png";
   }
 
-  uploadFile(file) {
-    this.file = file;
-    const formData = new FormData();
-    formData.append('file', file.data);
-    file.inProgress = true;
-    this.uploadService
-    .upload(formData)
-    .pipe(
-        map(event => {
-          switch (event.type) {
-            case HttpEventType.UploadProgress:
-              this.fileLabel = file.data.name + " uploading.";
-              file.progress = Math.round(event.loaded * 100 / event.total);
-              break;
-            default:
-              return event;
-          }
-        }),
-        catchError((error: HttpErrorResponse) => {
-          file.inProgress = false;
-          this.fileLabel = file.data.name + " upload failed.";
-          return of(`${file.data.name} upload failed.`);
-        })
-    ).subscribe((event: any) => {
-        if (typeof (event) === 'object') {
-          this.fileLabel = file.data.name + " uploaded.";
-        }
+  onSubmit() {
+    let authorObservable = this.quoteService.postAuthor(new Author(this.quotationForm.get('author'), this.authorImageName));
+    let sourceObservable = this.quoteService.postInformationSource(new InformationSource(this.quotationForm.get('source')));
+
+    forkJoin([authorObservable, sourceObservable]).subscribe(results =>{
+      let quote = new Quote(this.quotationForm.get('quotation').value, results[0].id, results[1].id);
+      this.quoteService
+      .postQuote(quote)
+      .subscribe((quoteResponse)=>{
+          console.log("Posted quote with id: " + quoteResponse.id);
+          console.log("Redirecting to quote edit page.");
+
       });
+
+    });
+
+    /*
+      create an author, create an information source objects.
+      post author and source objects.
+      We should have their ids, Create a quote and post it.
+      Forward to daily quote? or quote catalog?
+    */
   }
 
-  onClick() {
-    const fileUpload = this.fileUpload.nativeElement;
-    fileUpload.onchange = () => {
-      if(fileUpload.files.length > 0){
-        this.fileLabel = fileUpload.files[0].name + " selected.";
-        this.showPreviewImage(fileUpload.files[0]);
-        this.uploadFile({ data: fileUpload.files[0], inProgress: false, progress: 0});
-      }
-    };
-    fileUpload.click();
-  }
-
-  showPreviewImage(file){
-    var reader = new FileReader();
-    reader.onload = (event: any) => {
-        this.localUrl = event.target.result;
-    }
-    reader.readAsDataURL(file);
+  setAuthorImage(fileName: string){
+    this.authorImageName = fileName;
   }
 
 }
